@@ -4,7 +4,10 @@
 #include <fstream>
 
 using namespace std;
-/*
+//GLOBAL VECTOR
+fstream file;
+vector<Staff> list_of_staffs;
+
 class Manager
 {
 	string name;
@@ -12,13 +15,14 @@ class Manager
 	{
 		name = username;
 	}
-	bool create_staff(string code, string name, int age, int price, string password)
+	void create_staff(string code, string name, int age, int price, string password)
 	{
-		Staff x = Staff();
+		Staff name(code, name, age, price, password);
 	}
 };
 class Staff
 {
+public:
 	string code, name, password;
 	int age, price;
 	Staff(string codeinp, string nameinp, int ageinp, int priceinp, string passwordinp) {
@@ -27,10 +31,29 @@ class Staff
 		age = ageinp;
 		price = priceinp;
 		password = passwordinp;
+		file.open("Warehousemans.txt", ios::out);
+		if (file){
+			file << code << name << age << price << password;
+		}
 	}
 };
-
-*/
+class Item
+{
+public:
+	//Date 
+	string code, name, codeInputer;
+	int price, store;
+	// Methods
+	Item(
+		string nameI, string codeI, string codeInputerI, int priceI, int storeI
+		){
+		code = codeI;
+		name = nameI;
+		codeInputer = codeInputerI;
+		price = priceI;
+		store = storeI;
+	};
+};
 bool login()
 {
 	int type;
@@ -44,8 +67,7 @@ bool login()
 	cout << endl << "enter your password:";
 	getline(cin, password);
 	if (type == 1) {
-		fstream file;
-		file.open("manager.txt",  ios::in);
+		file.open("manager.txt", ios::in);
 		string userfile, passfile;
 		while (file >> userfile >> passfile)
 		{
@@ -69,7 +91,7 @@ int main() {
 			breackcon = 0;
 		}
 		else {
-			cout <<endl<< "this the false mother fucker if u want exit type 0 but if u wa 1";
+			cout << endl << "this the false mother fucker if u want exit type 0 but if u wa 1";
 			cin >> breackcon;
 		}
 
