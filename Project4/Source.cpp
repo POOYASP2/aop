@@ -3,55 +3,125 @@
 #include <vector>
 #include <fstream>
 
-
 using namespace std;
 //GLOBAL VECTOR
 fstream file;
-vector<Staff> list_of_staffs;
-int reverse(int str)
+//vector<Staff> list_of_staffs;
+int reverse(int num)
 {
-	return str;
+	int rem, reverse = 0;
+	while (num != 0)
+	{
+		rem = num % 10;
+		reverse = reverse * 10 + rem;
+		num /= 10;
+	}
+	return reverse;
 }
 class Manager
 {
-	public:
+public:
+	string name;
+	Manager(string username)
+	{
+		name = username;
+	}
+	void addStaff()
+	{
+		int forbreak = 1;
 		string name;
-		Manager(string username)
+		int code, age, price, password;
+		system("cls");
+		while (forbreak)
 		{
-			name = username;
+			try
+			{
+				cout << "Please enter code:" << endl;
+				cin >> code;
+				if (code < 10 || code > 99)
+				{
+					throw string("your code is must corrcet!");
+				}
+				cout << "please enter the name" << endl;
+				cin >> name;
+				cout << "please enter the age " << endl;
+				cin >> age;
+				if (age > 50 || age < 25)
+				{
+					throw string("your age is must corrcet!");
+				}
+				cout << "please enter the price" << endl;
+				cin >> price;
+				if (price <= 0)
+				{
+					throw string("your price is must corrcet!");
+				}
+				cout << "please enter the pass" << endl;
+				cin >> password;
+				if (password == reverse(password) || password < 1000)
+				{
+					throw string("your password is must corrcet!");
+				}
+				else
+				{
+					forbreak = 0;
+				}
+			}
+			catch (string msg)
+			{
+				cout << msg;
+			}
 		}
-		void create_staff(int code, string name, int age, int price, int password)
+		fstream file("Warehousemans.txt", ios::app);
+		file << code << ' ' << name << ' ' << age << ' ' << price << ' ' << password << endl;
+		file.close();
+
+	}
+	void mangerMunue()
+	{
+		while (true)
 		{
-			Staff name(code, name, age, price, password);
+			cout << "Wellcome back" << name << endl;
+			cout << "Please for:" << endl
+				<< "Add Staff enter 1" << endl
+				<< "Show Items enter 2" << endl
+				<< "show items less 5 count enter 3" << endl
+				<< "show must staff enter 4" << endl;
+			int choice;
+			cin >> choice;
+			switch (choice)
+			{
+			case 1:
+				addStaff();
+				break;
+			}
 		}
+	}
 };
 class Staff
 {
 public:
-	string  name, password;
-	int code, age, price;
-	Staff(int codeinp, string nameinp, int ageinp, int priceinp, string passwordinp) {
+	string name;
+	int code, age, price, password;
+	Staff(int codeinp, string nameinp, int ageinp, int priceinp, int passwordinp)
+	{
 		code = codeinp;
 		name = nameinp;
 		age = ageinp;
 		price = priceinp;
 		password = passwordinp;
-		file.open("Warehousemans.txt", ios::out);
-		if (file){
-			file << code << name << age << price << password;
-		}
 	}
 };
 class Item
 {
 public:
-	//Date 
+	//Date
 	string code, name, codeInputer;
 	int price, store;
 	// Methods
 	Item(
-		string nameI, string codeI, string codeInputerI, int priceI, int storeI
-		){
+		string nameI, string codeI, string codeInputerI, int priceI, int storeI)
+	{
 		code = codeI;
 		name = nameI;
 		codeInputer = codeInputerI;
@@ -59,100 +129,63 @@ public:
 		store = storeI;
 	};
 };
-int login()
+bool login(string name, int type)
 {
-	int type;
-	string name, password;
-	cout << "Please Enter your type:" << endl << "for manager type 1" << endl << "for storeman type 2" << endl;
-	cin >> type;
-	system("cls");
-	cout << "enter your usrname:";
-	cin.ignore();
-	getline(cin, name);
-	cout << endl << "enter your password:";
-	getline(cin, password);
-	if (type == 1) {
+	int password;
+	cout << endl
+		<< "enter your password:";
+	cin >> password;
+	if (type == 1)
+	{
 		file.open("manager.txt", ios::in);
-		string userfile, passfile;
+		string userfile;
+		int passfile;
 		while (file >> userfile >> passfile)
 		{
-			if (userfile == name && passfile == password) {
-				return type;
+			if (userfile == name && passfile == password)
+			{
+				return true;
 			}
-
 		}
 
 		file.close();
 		return false;
 	}
 }
-void addStaff(){
-	int forbreak = 1;
-	system("cls");
-	while (forbreak)
-	{
-		string  name, password;
-		int code, age, price;
-		try{
-			cout << "Please enter code:";
-			cin >> code;
-			if (code<10 && code>99){
-				throw string("your code is must corrcet!");
-			}
-			cin >> name;
-			cin >> age;
-			if (age > 50 && age < 25){
-				throw string("your age is must corrcet!");
-			}
-			cin >> price;
-			if (price <= 0){
-				throw string("your price is must corrcet!");
-			}
-			cin >> password;
-			if (password == reverse(password) && password.length())
 
-		}
-		catch (string msg){
-			cout << msg;
-		}
-	}
-}
-void mangerMunue(Manager persona){
-	while (true)
-	{
-		cout << "Wellcome back" << persona.name<<endl;
-		cout << "Please for:" << endl << "Add Staff enter 1" << endl << "Show Items enter 2" << endl << "show items less 5 count enter 3" << endl << "show must staff enter 4"<<endl;
-		int choice;
-		cin >> choice;
-		switch (choice) {
-		case 1:
-			addStaff();
-			break;
-		}
-	}
-}
-int main() {
+int main()
+{
 	int breackcon = 1;
-	while (breackcon) {
-		if (login() == 1) {
-			mangerMunue();
+	int type;
+	string USERNAME;
+	while (breackcon)
+	{
+		cout << "Please Enter your type:" << endl
+			<< "for manager type 1" << endl
+			<< "for storeman type 2" << endl;
+		cin >> type;
+		system("cls");
+		cout << "enter your usrname:";
+		cin>> USERNAME;
+		if (login(USERNAME, type) && type == 1)
+		{
+			Manager persona(USERNAME);
+			persona.mangerMunue();
 			breackcon = 0;
 		}
-		else if (login() == 2){
-			cout << endl << "True";
+		else if (login(USERNAME, type))
+		{
+			cout << endl
+				<< "True";
 			breackcon = 0;
 		}
-		else {
-			cout << endl << "this the false  if u want exit type 0 but if u wa 1";
+		else
+		{
+			cout << endl
+				<< "this the false  if u want exit type 0 but if u wa 1";
 			cin >> breackcon;
 		}
-
 	}
 	int a;
 	cin >> a;
-
-
 }
-
-
-
